@@ -53,7 +53,7 @@ BigInt::BigInt(char i) {
         this->isNegative = false;
     else
         this->isNegative = true;
-    this->lnum.push_back(std::abs(i));
+    this->lnum.push_back(abs(i));
 }
 
 BigInt::BigInt(short i) {
@@ -61,7 +61,7 @@ BigInt::BigInt(short i) {
         this->isNegative = false;
     else
         this->isNegative = true;
-    this->lnum.push_back(std::abs(i));
+    this->lnum.push_back(abs(i));
 }
 
 
@@ -88,8 +88,8 @@ BigInt operator+(BigInt left, const BigInt& right) {
         return left - (-right);
 
     int carry = 0;
-    for (size_t i = 0;
-        i < std::max(left.lnum.size(), right.lnum.size()) || carry != 0; ++i) {
+    for (long long i = 0;
+        i < max(left.lnum.size(), right.lnum.size()) || carry != 0; ++i) {
         if (i == left.lnum.size()) left.lnum.push_back(0);
 
         left.lnum[i] += carry + (i < right.lnum.size() ? right.lnum[i] : 0);
