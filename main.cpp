@@ -1,7 +1,4 @@
-
 #include <iostream>
-#include <vector>
-#include <iomanip>
 #include "BigIntHeader.h"
 using namespace std;
 
@@ -16,4 +13,5 @@ int main() {
     cout << b / 4 << endl;
     cout << a % 12 << endl;
     return 0;
+    
 }
