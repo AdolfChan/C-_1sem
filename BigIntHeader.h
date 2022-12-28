@@ -7,24 +7,7 @@
 using namespace std;
 
 class BigInt {
-    friend ostream& operator<<(std::ostream&, const BigInt&);
-    friend BigInt operator-(BigInt, const BigInt&);
-    BigInt operator -=(const BigInt&);
-    friend BigInt operator+(BigInt, const BigInt&);
-    BigInt operator +=(const BigInt&);
-    const BigInt operator ++();
-    friend bool operator<(const BigInt&, const BigInt&);
-    friend bool operator !=(const BigInt&, const BigInt&);
-    friend bool operator <=(const BigInt&, const BigInt&);
-    friend bool operator >(const BigInt&, const BigInt&);
-    friend bool operator >=(const BigInt&, const BigInt&);
-    friend BigInt operator*(BigInt&, const BigInt&);
-    BigInt operator *=(const BigInt&);
-    friend BigInt operator/(BigInt, long long);
-    friend BigInt operator%(BigInt, long long);
-
 public:
-
     BigInt(int);
     BigInt(size_t);
     BigInt(char);
@@ -32,12 +15,12 @@ public:
     BigInt(long);
     BigInt(long long);
 
-    std::vector<int> lnum;
-    bool isNegative;
-    static const int BASE = 1000000000;
+    BigInt operator++();
+    BigInt operator--();
+
     BigInt() { this->isNegative = false; };
 
-    BigInt(std::string str) {
+    BigInt(string& str) {
         if (str.length() == 0) {
             this->isNegative = false;
         }
@@ -61,6 +44,29 @@ public:
         }
     }
 
+private:
+    static const int BASE = 1000000000;
+    vector<int> lnum;
+    bool isNegative;
+
+    BigInt operator*=(const BigInt&);
+    BigInt operator-=(const BigInt&);
+    BigInt operator+=(const BigInt&);
+    BigInt operator/=(const long long);
+    BigInt operator%=(const long long);
+    friend ostream& operator<<(ostream&, const BigInt&);
+    friend BigInt operator+(BigInt, const BigInt&);
+    friend bool operator==(const BigInt&, const BigInt&);
+    friend bool operator<(const BigInt&, const BigInt&);
+    friend bool operator!=(const BigInt&, const BigInt&);
+    friend bool operator<=(const BigInt&, const BigInt&);
+    friend bool operator>(const BigInt&, const BigInt&);
+    friend bool operator>=(const BigInt&, const BigInt&);
+    friend BigInt operator*(const BigInt&, const BigInt&);
+    friend BigInt operator/(BigInt&, long long);
+    friend BigInt operator%(BigInt&, long long);
+    friend BigInt operator-(BigInt, const BigInt&);
+
     BigInt& operator-() const {
         BigInt copy(*this);
         copy.isNegative = !copy.isNegative;
@@ -74,6 +80,5 @@ public:
 
         if (this->lnum.size() == 1 && this->lnum[0] == 0) this->isNegative = false;
     }
-
 };
 #endif
