@@ -4,8 +4,7 @@
 #include "BigIntHeader.h"
 using namespace std;
 
-
-// Преобразование 
+// Преобразование
 BigInt::BigInt(int i) {
     if (i > 0)
         this->isNegative = false;
@@ -26,18 +25,16 @@ BigInt::BigInt(long i) {
     this->lnum.push_back(abs(i) % BigInt::BASE);
     i /= BigInt::BASE;
     if (i != 0) this->lnum.push_back(abs(i));
-
 }
 BigInt::BigInt(long long i) {
     if (i > 0)
         this->isNegative = false;
-    else 
+    else
         this->isNegative = true;
     do {
         this->lnum.push_back(abs(i) % BigInt::BASE);
         i /= BigInt::BASE;
     } while (i != 0);
-
 }
 
 BigInt::BigInt(size_t i) {
@@ -53,7 +50,7 @@ BigInt::BigInt(char i) {
         this->isNegative = false;
     else
         this->isNegative = true;
-    this->lnum.push_back(abs(i));
+    this->lnum.push_back(std::abs(i));
 }
 
 BigInt::BigInt(short i) {
@@ -61,9 +58,8 @@ BigInt::BigInt(short i) {
         this->isNegative = false;
     else
         this->isNegative = true;
-    this->lnum.push_back(abs(i));
+    this->lnum.push_back(std::abs(i));
 }
-
 
 ostream& operator<<(ostream& os, const BigInt& bi) {
     if (bi.lnum.empty())
@@ -77,6 +73,9 @@ ostream& operator<<(ostream& os, const BigInt& bi) {
     return os;
 }
 
+BigInt BigInt::operator++() { return (*this += 1); }
+BigInt BigInt::operator--() { return (*this -= 1); }
+
 BigInt operator+(BigInt left, const BigInt& right) {
     if (left.isNegative) {
         if (right.isNegative)
@@ -88,8 +87,8 @@ BigInt operator+(BigInt left, const BigInt& right) {
         return left - (-right);
 
     int carry = 0;
-    for (long long i = 0;
-        i < max(left.lnum.size(), right.lnum.size()) || carry != 0; ++i) {
+    for (size_t i = 0;
+        i < std::max(left.lnum.size(), right.lnum.size()) || carry != 0; ++i) {
         if (i == left.lnum.size()) left.lnum.push_back(0);
 
         left.lnum[i] += carry + (i < right.lnum.size() ? right.lnum[i] : 0);
@@ -101,11 +100,8 @@ BigInt operator+(BigInt left, const BigInt& right) {
     return left;
 }
 
-BigInt BigInt::operator +=(const BigInt& value) {
+BigInt BigInt::operator+=(const BigInt& value) {
     return *this = (*this + value);
-}
-const BigInt BigInt::operator++() {
-    return (*this += 1);
 }
 
 bool operator<(const BigInt& left, const BigInt& right) {
@@ -130,18 +126,21 @@ bool operator<(const BigInt& left, const BigInt& right) {
         }
     }
 }
-bool operator ==(const BigInt& left, const BigInt& right) {
-
+bool operator==(const BigInt& left, const BigInt& right) {
     if (left.isNegative != right.isNegative) return false;
 
     if (left.lnum.empty()) {
-        if (right.lnum.empty() || (right.lnum.size() == 1 && right.lnum[0] == 0)) return true;
-        else return false;
+        if (right.lnum.empty() || (right.lnum.size() == 1 && right.lnum[0] == 0))
+            return true;
+        else
+            return false;
     }
 
     if (right.lnum.empty()) {
-        if (left.lnum.size() == 1 && left.lnum[0] == 0) return true;
-        else return false;
+        if (left.lnum.size() == 1 && left.lnum[0] == 0)
+            return true;
+        else
+            return false;
     }
 
     if (left.lnum.size() != right.lnum.size()) return false;
@@ -150,18 +149,18 @@ bool operator ==(const BigInt& left, const BigInt& right) {
 
     return true;
 }
-bool operator >(const BigInt& left, const BigInt& right) {
+bool operator>(const BigInt& left, const BigInt& right) {
     return !(left <= right);
 }
-bool operator !=(const BigInt& left, const BigInt& right) {
+bool operator!=(const BigInt& left, const BigInt& right) {
     return !(left == right);
 }
 
-bool operator <=(const BigInt& left, const BigInt& right) {
+bool operator<=(const BigInt& left, const BigInt& right) {
     return !(right < left);
 }
 
-bool operator >=(const BigInt& left, const BigInt& right) {
+bool operator>=(const BigInt& left, const BigInt& right) {
     return !(left < right);
 }
 
@@ -184,11 +183,11 @@ BigInt operator-(BigInt left, const BigInt& right) {
     return left;
 }
 
-BigInt BigInt::operator -=(const BigInt& value) {
+BigInt BigInt::operator-=(const BigInt& value) {
     return *this = (*this - value);
 }
 
-BigInt operator*(BigInt& left, const BigInt& right) {
+BigInt operator*(const BigInt& left, const BigInt& right) {
     BigInt result;
     result.lnum.resize(left.lnum.size() + right.lnum.size());
 
@@ -208,11 +207,11 @@ BigInt operator*(BigInt& left, const BigInt& right) {
     return result;
 }
 
-BigInt BigInt::operator *=(const BigInt& value) {
+BigInt BigInt::operator*=(const BigInt& value) {
     return *this = (*this * value);
 }
 
-BigInt operator/(BigInt left, long long right) {
+BigInt operator/(BigInt& left, long long right) {
     int carry = 0;
     for (int i = (int)left.lnum.size() - 1; i >= 0; --i) {
         long long cur = left.lnum[i] + carry * 1ll * BigInt::BASE;
@@ -224,7 +223,11 @@ BigInt operator/(BigInt left, long long right) {
     return left;
 }
 
-BigInt operator%(BigInt left, long long right) {
+BigInt BigInt::operator/=(const long long value) {
+    return *this = (*this / value);
+}
+
+BigInt operator%(BigInt& left, long long right) {
     int carry = 0;
     for (int i = (int)left.lnum.size() - 1; i >= 0; --i) {
         long long cur = left.lnum[i] + carry * 1ll * BigInt::BASE;
@@ -234,4 +237,8 @@ BigInt operator%(BigInt left, long long right) {
     left.remove_zeroes();
 
     return carry;
+}
+
+BigInt BigInt::operator%=(const long long value) {
+    return *this = (*this % value);
 }
