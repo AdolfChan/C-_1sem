@@ -15,8 +15,11 @@ public:
     BigInt(long);
     BigInt(long long);
 
+    BigInt operator ++(int);
+    BigInt operator --(int);
     BigInt operator++();
     BigInt operator--();
+    BigInt operator-() const;
 
     BigInt() { this->isNegative = false; };
 
@@ -63,15 +66,9 @@ private:
     friend bool operator>(const BigInt&, const BigInt&);
     friend bool operator>=(const BigInt&, const BigInt&);
     friend BigInt operator*(const BigInt&, const BigInt&);
-    friend BigInt operator/(BigInt&, long long);
-    friend BigInt operator%(BigInt&, long long);
+    friend BigInt operator/(const BigInt&, long long);
+    friend BigInt operator%(const BigInt&, long long);
     friend BigInt operator-(BigInt, const BigInt&);
-
-    BigInt& operator-() const {
-        BigInt copy(*this);
-        copy.isNegative = !copy.isNegative;
-        return copy;
-    }
 
     void remove_zeroes() {
         while (this->lnum.size() > 1 && this->lnum.back() == 0) {
