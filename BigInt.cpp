@@ -74,7 +74,21 @@ ostream& operator<<(ostream& os, const BigInt& bi) {
 }
 
 BigInt BigInt::operator++() { return (*this += 1); }
+BigInt BigInt::operator ++(int) {
+    *this += 1;
+    return *this;
+}
+
 BigInt BigInt::operator--() { return (*this -= 1); }
+BigInt BigInt::operator --(int) {
+    *this -= 1;
+    return *this;
+}
+BigInt BigInt::operator-() const {
+    BigInt copy(*this);
+    copy.isNegative = !copy.isNegative;
+    return copy;
+}
 
 BigInt operator+(BigInt left, const BigInt& right) {
     if (left.isNegative) {
@@ -211,30 +225,37 @@ BigInt BigInt::operator*=(const BigInt& value) {
     return *this = (*this * value);
 }
 
-BigInt operator/(BigInt& left, long long right) {
+BigInt operator/(const BigInt& left, long long right) {
     int carry = 0;
+    BigInt result;
+
+    result.lnum.resize(left.lnum.size());
+
     for (int i = (int)left.lnum.size() - 1; i >= 0; --i) {
         long long cur = left.lnum[i] + carry * 1ll * BigInt::BASE;
-        left.lnum[i] = int(cur / right);
+        result.lnum[i] = int(cur / right);
         carry = int(cur % right);
     }
-    left.remove_zeroes();
+    result.remove_zeroes();
 
-    return left;
+    return result;
 }
 
 BigInt BigInt::operator/=(const long long value) {
     return *this = (*this / value);
 }
 
-BigInt operator%(BigInt& left, long long right) {
+BigInt operator%(const BigInt& left, long long right) {
     int carry = 0;
+    BigInt result;
+    result.lnum.resize(left.lnum.size());
+
     for (int i = (int)left.lnum.size() - 1; i >= 0; --i) {
         long long cur = left.lnum[i] + carry * 1ll * BigInt::BASE;
-        left.lnum[i] = int(cur / right);
+        result.lnum[i] = int(cur / right);
         carry = int(cur % right);
     }
-    left.remove_zeroes();
+    result.remove_zeroes();
 
     return carry;
 }
