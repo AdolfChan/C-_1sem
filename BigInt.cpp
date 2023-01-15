@@ -76,13 +76,13 @@ ostream& operator<<(ostream& os, const BigInt& bi) {
 BigInt BigInt::operator++() { return (*this += 1); }
 BigInt BigInt::operator ++(int) {
     *this += 1;
-    return *this;
+    return *this - 1;
 }
 
 BigInt BigInt::operator--() { return (*this -= 1); }
 BigInt BigInt::operator --(int) {
     *this -= 1;
-    return *this;
+    return *this + 1;
 }
 BigInt BigInt::operator-() const {
     BigInt copy(*this);
